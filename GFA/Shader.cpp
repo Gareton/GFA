@@ -4,42 +4,14 @@
 GLuint shd::Shader::_USE_ID = 0;
 
 
-shd::Shader::Shader(dtli::DataLoaderInterface *loader, const std::string &vShaderPath, const std::string &fShaderPath, const std::string &gShaderPath)
+shd::Shader::Shader(TextFile vShaderFile, TextFile fShaderFile, TextFile gShaderFile)
 {
-	std::string vertexSource;
-	std::string fragmentSource;
-	std::string geometrySource;
-
-	try {
-		vertexSource = std::move(loader->loadFile(vShaderPath));
-		fragmentSource = std::move(loader->loadFile(fShaderPath));
-		geometrySource = std::move(loader->loadFile(gShaderPath));
-	}
-
-	catch (dtli::LoadingFailure &f)
-	{
-		throw shd::ShaderCreatingFailed("FAILED TO LOAD SOURCE FILE:" + f.getPath());
-	}
-
-	compile(vertexSource, fragmentSource, geometrySource);
+	compile(vShaderFile.getText(), fShaderFile.getText(), gShaderFile.getText());
 }
 
-shd::Shader::Shader(dtli::DataLoaderInterface *loader, const std::string &vShaderPath, const std::string &fShaderPath)
+shd::Shader::Shader(TextFile vShaderFile, TextFile fShaderFile)
 {
-	std::string vertexSource;
-	std::string fragmentSource;
-
-	try {
-		vertexSource = loader->loadFile(vShaderPath);
-		fragmentSource = loader->loadFile(fShaderPath);
-	}
-
-	catch (dtli::LoadingFailure &f)
-	{
-		throw shd::ShaderCreatingFailed("FAILED TO LOAD SOURCE FILE:" + f.getPath());
-	}
-
-	compile(vertexSource, fragmentSource);
+	compile(vShaderFile.getText(), fShaderFile.getText());
 }
 
 shd::Shader::~Shader()
@@ -53,7 +25,7 @@ shd::Shader::~Shader()
 	glDeleteProgram(_id);
 }
 
-GLuint shd::Shader::GetID()
+GLuint shd::Shader::getID()
 {
 	return _id;
 }
@@ -135,48 +107,35 @@ void shd::Shader::setUniformMat3(const std::string &name, const glm::mat3 &mat)
 	glUniformMatrix3fv(glGetUniformLocation(_id, name.c_str()), 1, GL_FALSE, glm::value_ptr(mat));
 }
 
-void shd::Shader::compile(const std::string &vSource, const std::string &fSource, const std::string &gSource)
+void shd::Shader::compile(const char *vSource, const char *fSource, const char *gSource)
 {
 	GLuint vShader, fShader, gShader;
 
 	vShader = createShader(obj_type::vertexShader, vSource);
 	fShader = createShader(obj_type::fragmentShader, fSource);
-	gShader = createShader(obj_type::geometryShader, gSource);
 
-	_id = glCreateProgram();
-
-	glAttachShader(_id, vShader);
-	glAttachShader(_id, fShader);
-	glAttachShader(_id, gShader);
-
-	glLinkProgram(_id);
-	checkErrors(_id, obj_type::shaderProgram);
-
-	glDeleteShader(vShader);
-	glDeleteShader(fShader);
-	glDeleteShader(gShader);
-}
-
-void shd::Shader::compile(const std::string &vSource, const std::string &fSource)
-{
-	GLuint vShader, fShader;
-
-	vShader = createShader(obj_type::vertexShader, vSource);
-	fShader = createShader(obj_type::fragmentShader, fSource);
+	if(gSource != nullptr)
+		gShader = createShader(obj_type::geometryShader, gSource);
 
 	_id = glCreateProgram();
 
 	glAttachShader(_id, vShader);
 	glAttachShader(_id, fShader);
 
+	if (gSource != nullptr)
+		glAttachShader(_id, gShader);
+
 	glLinkProgram(_id);
 	checkErrors(_id, obj_type::shaderProgram);
 
 	glDeleteShader(vShader);
 	glDeleteShader(fShader);
+
+	if (gSource != nullptr)
+		glDeleteShader(gShader);
 }
 
-GLuint shd::Shader::createShader(obj_type type, const std::string &source)
+GLuint shd::Shader::createShader(obj_type type, const char *source)
 {
 	GLuint shader = 0;
 
@@ -196,9 +155,7 @@ GLuint shd::Shader::createShader(obj_type type, const std::string &source)
 		break;
 	}
 
-	const char *c_str = source.c_str();
-
-	glShaderSource(shader, 1, &c_str, nullptr);
+	glShaderSource(shader, 1, &source, nullptr);
 	glCompileShader(shader);
 	checkErrors(shader, type);
 

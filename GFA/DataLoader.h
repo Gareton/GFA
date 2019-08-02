@@ -3,6 +3,7 @@
 
 class DataLoader : public dtli::DataLoaderInterface {
 public:
-	dtli::image_data &loadImage(const std::string &path);
-	std::string loadFile(const std::string &path);
+	Image loadImage(const std::string &path);
+	TextFile loadTextFile(const std::string &path);
+	XmlData loadXmlData(const std::string &path);
 };

@@ -1,15 +1,11 @@
 #pragma once
 #include <string>
 #include <glad/glad.h>
+#include "Image.h"
+#include "Text_File.h"
+#include "XmlData.h"
 
 namespace dtli {
-
-	struct image_data {
-		std::string image = "";
-		GLuint colorComponents = 0;
-		GLuint width = 0;
-		GLuint height = 0;
-	};
 
 	class LoadingFailure {
 	public:
@@ -21,8 +17,9 @@ namespace dtli {
 
 	class DataLoaderInterface {
 	public:
-		virtual image_data &loadImage(const std::string &path) = 0;
-		virtual std::string loadFile(const std::string &path) = 0;
+		virtual Image loadImage(const std::string &path) = 0;
+		virtual TextFile loadTextFile(const std::string &path) = 0;
+		virtual XmlData loadXmlData(const std::string &path) = 0;
 	};
 
 }

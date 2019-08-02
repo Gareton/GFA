@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker https://www.codeandweb.com/texturepacker -->
+<!-- $TexturePacker:SmartUpdate:16db4e42f97d3db31b9dd57af89e3dcb:e1bff23b6dd8c8df630dea53c1805717:5e324cd19d7ca79b4d564eda04f903f6$ -->
+<!--Format:
+n  => name of the sprite
+x  => sprite x pos in texture
+y  => sprite y pos in texture
+w  => sprite width (may be trimmed)
+h  => sprite height (may be trimmed)
+pX => x pos of the pivot point (relative to sprite width)
+pY => y pos of the pivot point (relative to sprite height)
+oX => sprite's x-corner offset (only available if trimmed)
+oY => sprite's y-corner offset (only available if trimmed)
+oW => sprite's original width (only available if trimmed)
+oH => sprite's original height (only available if trimmed)
+r => 'y' only set if sprite is rotated
+with polygon mode enabled:
+vertices   => points in sprite coordinate system (x0,y0,x1,y1,x2,y2, ...)
+verticesUV => points in sheet coordinate system (x0,y0,x1,y1,x2,y2, ...)
+triangles  => sprite triangulation, 3 vertex indices per triangle
+-->
+<TextureAtlas imagePath="atlas_texture.png" width="2048" height="1756">
+    <sprite n="awesomeface.png" x="1000" y="256" w="600" h="600"/>
+    <sprite n="background.jpg" x="0" y="856" w="1600" h="900"/>
+    <sprite n="block.png" x="128" y="128" w="128" h="128"/>
+    <sprite n="block_solid.png" x="0" y="128" w="128" h="128"/>
+    <sprite n="Inkedparticle_LI.jpg" x="500" y="256" w="500" h="500"/>
+    <sprite n="paddle.png" x="512" y="0" w="512" h="128"/>
+    <sprite n="particle.png" x="0" y="256" w="500" h="500"/>
+    <sprite n="powerup_chaos.png" x="1024" y="0" w="512" h="128"/>
+    <sprite n="powerup_confuse.png" x="0" y="0" w="512" h="128"/>
+    <sprite n="powerup_increase.png" x="1536" y="0" w="512" h="128"/>
+    <sprite n="powerup_passthrough.png" x="768" y="128" w="512" h="128"/>
+    <sprite n="powerup_speed.png" x="1280" y="128" w="512" h="128"/>
+    <sprite n="powerup_sticky.png" x="256" y="128" w="512" h="128"/>
+</TextureAtlas>

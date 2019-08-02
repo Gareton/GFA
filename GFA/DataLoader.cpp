@@ -1,36 +1,31 @@
 #include "DataLoader.h"
-#include "stb_image.h"
-#include <iostream>
-#include <fstream>
-#include <sstream>
 
-dtli::image_data &DataLoader::loadImage(const std::string &path)
+Image DataLoader::loadImage(const std::string &path)
 {
-	dtli::image_data invalid;
+	Image image(path);
 
-	return invalid;
+	if (image.getImage() == nullptr)
+		throw dtli::LoadingFailure(path);
+
+	return std::move(image);
 }
 
-
-std::string DataLoader::loadFile(const std::string &path)
+TextFile DataLoader::loadTextFile(const std::string &path)
 {
-	std::ifstream input;
-	std::stringstream dataStream;
+	TextFile tfile(path);
 
-	input.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+	if (tfile.getText() == nullptr)
+		throw dtli::LoadingFailure(path);
 
-	try {
-		input.open(path);
+	return std::move(tfile);
+}
 
-		dataStream << input.rdbuf();
+XmlData DataLoader::loadXmlData(const std::string &path)
+{
+	XmlData xml_data(path);
 
-		input.close();
-	}
+	if (xml_data.getData().size() == 0)
+		throw dtli::LoadingFailure(path);
 
-	catch (std::ifstream::failure e)
-	{
-		throw(dtli::LoadingFailure(path));
-	}
-
-	return dataStream.str();
+	return std::move(xml_data);
 }
